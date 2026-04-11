@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README AI</title>
+</head>
+<body>
+  <div id="settings-view" class="hidden">
+    <div class="panel">
+      <h2>GitHub Settings</h2>
+      <p>Enter your Personal Access Token (PAT) to connect to GitHub.</p>
+      <p class="hint">Token requires <code>repo</code> scope for private repos.</p>
+      <input type="password" id="token-input" placeholder="ghp_..." />
+      <button id="save-token">Save Token</button>
+    </div>
+  </div>
+
+  <div id="app-view" class="hidden">
+    <div class="header">
+      <span class="user">Logged in as <strong id="user-login"></strong></span>
+      <button id="logout" class="secondary">Logout</button>
+    </div>
+
+    <div class="controls">
+      <select id="repo-select">
+        <option value="">Select repository</option>
+      </select>
+      <button id="publish-btn">Publish to GitHub</button>
+    </div>
+
+    <div class="workspace">
+      <div class="editor-pane">
+        <textarea id="markdown-editor" placeholder="Write your README in Markdown..."></textarea>
+      </div>
+      <div class="preview-pane">
+        <div id="preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

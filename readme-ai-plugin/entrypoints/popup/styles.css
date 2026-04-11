@@ -1,0 +1,232 @@
+:root {
+  --bg: #0d1117;
+  --bg-secondary: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --accent-hover: #79c0ff;
+  --success: #238636;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 800px;
+  height: 550px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.panel {
+  padding: 24px;
+}
+
+h2 {
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+p {
+  margin-bottom: 12px;
+  color: var(--text-muted);
+}
+
+.hint {
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+code {
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text);
+  font-size: 14px;
+}
+
+button {
+  cursor: pointer;
+  background: var(--success);
+  border: none;
+  font-weight: 600;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button.secondary {
+  width: auto;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.header .user {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.controls select {
+  flex: 1;
+  margin: 0;
+}
+
+.controls button {
+  width: auto;
+  margin: 0;
+}
+
+.workspace {
+  display: flex;
+  height: calc(100% - 110px);
+}
+
+.editor-pane, .preview-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-pane {
+  border-right: 1px solid var(--border);
+}
+
+textarea {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.preview-pane {
+  overflow-y: auto;
+}
+
+#preview {
+  padding: 16px;
+  line-height: 1.6;
+}
+
+#preview h1, #preview h2, #preview h3 {
+  margin: 16px 0 8px;
+}
+
+#preview h1 { font-size: 28px; }
+#preview h2 { font-size: 22px; }
+#preview h3 { font-size: 18px; }
+
+#preview p {
+  margin: 8px 0;
+  color: var(--text);
+}
+
+#preview code {
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 13px;
+}
+
+#preview pre {
+  background: var(--bg-secondary);
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+#preview pre code {
+  background: none;
+  padding: 0;
+}
+
+#preview ul, #preview ol {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+
+#preview li {
+  margin: 4px 0;
+}
+
+#preview a {
+  color: var(--accent);
+}
+
+#preview blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 12px;
+  color: var(--text-muted);
+  margin: 8px 0;
+}
+
+#preview img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+#preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0;
+}
+
+#preview th, #preview td {
+  border: 1px solid var(--border);
+  padding: 8px;
+  text-align: left;
+}
+
+#preview th {
+  background: var(--bg-secondary);
+}
