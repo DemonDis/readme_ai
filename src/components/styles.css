@@ -1,6 +1,7 @@
 .popup {
-  padding: 16px;
-  width: 300px;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -86,6 +87,23 @@ button.push-btn:hover:not(:disabled) {
   background: #15803d;
 }
 
+button.open-tab-btn {
+  margin-top: 8px;
+  background: #6b7280;
+}
+
+button.open-tab-btn:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+button.git-btn {
+  background: #f97316;
+}
+
+button.git-btn:hover:not(:disabled) {
+  background: #ea580c;
+}
+
 .status {
   margin-top: 12px;
   font-size: 12px;
@@ -106,4 +124,84 @@ button.push-btn:hover:not(:disabled) {
 .status.error {
   background: #fef2f2;
   color: #dc2626;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 8px;
+}
+
+.buttons-row button {
+  flex: 1;
+}
+
+.divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 16px 0;
+}
+
+.file-input {
+  padding: 8px;
+}
+
+.files-list {
+  margin: 12px 0;
+}
+
+.files-list label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.file-item span {
+  font-size: 12px;
+  color: #374151;
+  word-break: break-all;
+}
+
+.file-item .remove-btn {
+  width: auto;
+  padding: 2px 8px;
+  background: #ef4444;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.git-command-box {
+  margin: 12px 0;
+  padding: 12px;
+  background: #1e293b;
+  border-radius: 6px;
+}
+
+.git-command-box label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.git-command-box code {
+  display: block;
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 11px;
+  color: #22d3ee;
+  word-break: break-all;
+  background: #0f172a;
+  padding: 8px;
+  border-radius: 4px;
 }

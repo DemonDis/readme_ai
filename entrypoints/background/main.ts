@@ -15,6 +15,10 @@ export default defineBackground({
         getRepoPath(message.payload).then(sendResponse);
         return true;
       }
+      if (message.type === 'CURRENT_REPO_DETECTED') {
+        handleCurrentRepoDetected(message.payload);
+        return false;
+      }
       return false;
     });
   },
@@ -205,4 +209,16 @@ async function getRepoPath({ repoUrl }: { repoUrl: string }) {
     return { path: result.currentRepo.path };
   }
   return { path: null };
+}
+
+interface CurrentRepoPayload {
+  repoUrl: string;
+  owner: string;
+  repo: string;
+}
+
+async function handleCurrentRepoDetected({ repoUrl, owner, repo }: CurrentRepoPayload) {
+  await browser.storage.local.set({
+    currentOpenRepo: { url: repoUrl, owner, repo }
+  });
 }

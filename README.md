@@ -98,3 +98,37 @@ readme-ai/
 - **pnpm dev** - может не работать из-за бага WXT
 - Используйте `pnpm build` + ручную перезагрузку расширения для тестирования
 - Требуется Node.js 20 (проверено на 20.20.2)
+
+
+# 1. Сделать скрипт исполняемым
+chmod +x ~/readme-ai-native/src/native.sh
+
+# 2. Создать директорию для нативных приложений Firefox
+mkdir -p ~/.mozilla/native-messaging-apps
+
+# 3. Создать конфиг
+cat > ~/.mozilla/native-messaging-apps/readme-ai-native.json << 'EOF'
+{
+  "name": "Readme AI Native",
+  "description": "Git clone for Readme AI",
+  "path": "~/readme-ai-native/src/native.sh",
+  "type": "stdio"
+}
+EOF
+
+
+# Создать директорию
+mkdir -p ~/.mozilla/native-messaging-apps
+
+# Скопировать конфиг
+cp ~/readme-ai-native/firefox.json ~/.mozilla/native-messaging-apps/readme.ai.native.json
+
+
+# Update native messaging config
+echo '{
+  "name": "readme.ai.native",
+  "description": "Git clone for Readme AI",
+  "path": "/Users/dimart/Desktop/GIT/readme-ai-native/src/native.sh",
+  "type": "stdio",
+  "allowed_extensions": ["readmeai@github"]
+}' > ~/.mozilla/native-messaging-apps/readme.ai.native.json
