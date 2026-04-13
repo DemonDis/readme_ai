@@ -1,0 +1,61 @@
+{
+  "name": "readme-ai",
+  "displayName": "Readme AI",
+  "description": "AI-powered README generator using repomix",
+  "version": "0.0.1",
+  "publisher": "readme-ai",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "readme-ai.setup",
+        "title": "Setup Readme AI"
+      },
+      {
+        "command": "readme-ai.generate",
+        "title": "Generate README with AI"
+      }
+    ],
+    "configuration": {
+      "title": "Readme AI",
+      "properties": {
+        "readme-ai.apiUrl": {
+          "type": "string",
+          "default": "",
+          "description": "API URL for AI service"
+        },
+        "readme-ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API Key for AI service"
+        },
+        "readme-ai.model": {
+          "type": "string",
+          "default": "",
+          "description": "Model name to use"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "repomix": "^0.2.0"
+  }
+}
