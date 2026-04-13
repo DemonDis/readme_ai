@@ -1,0 +1,8 @@
+node_modules/
+.output/
+.dev/
+.wxt/
+*.log
+.DS_Store
+dist/
+.env
