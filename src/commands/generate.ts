@@ -4,10 +4,12 @@ import * as path from 'path';
 import { ConfigService } from '../services/config';
 import { RepomixService } from '../services/repomix';
 import { AiService } from '../services/ai';
+import { TokenService } from '../services/token';
 
 const configService = new ConfigService();
 const repomixService = new RepomixService();
 const aiService = new AiService();
+const tokenService = new TokenService();
 
 export function registerGenerateCommand(context: vscode.ExtensionContext): vscode.Disposable {
   return vscode.commands.registerCommand('readme-ai.generate', async () => {
@@ -43,6 +45,9 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
       vscode.window.showInformationMessage('Repomix completed');
 
       const repomixContent = repomixService.readOutput(outputPath);
+      const tokenCount = tokenService.countForQwen(repomixContent);
+      
+      vscode.window.showInformationMessage(`Token count (Qwen): ${tokenCount.toLocaleString()}`);
 
       vscode.window.showInformationMessage('Sending to AI...');
       

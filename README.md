@@ -4,30 +4,66 @@ VSCode плагин для генерации README с помощью AI и rep
 
 ## Возможности
 
-- 📦 Упаковка репозитория в единый файл с помощью repomix
+- 📦 Упаковка репозитория в единый файл с помощью **repomix**
 - 🤖 Отправка кода в AI для генерации README
-- ⚙️ Настройка API URL, API Key и модели через команды
+- 🔢 Подсчёт токенов для модели Qwen
+- ⚙️ Автоматическое создание конфигов `.ilnsk` и `repomix.config.json`
 
 ## Установка
 
-1. Склонируйте репозиторий или скопируйте папку в `.vscode/extensions/`
-2. Запустите VSCode в режиме разработки (F5)
-3. Установите расширение
+### Из исходников
 
-## Настройка
+```bash
+npm install
+npm run compile
+npm run package
+```
 
-1. Откройте палитру команд (Ctrl+Shift+P или Cmd+Shift+P)
-2. Выполните `Readme AI: Setup`
-3. Введите:
-   - **API URL** - URL API
-   - **API Key** - ваш API ключ
-   - **Model** - название модели
+Установите полученный `.vsix` файл через VSCode: `Extensions: Install from VSIX`
+
+### Режим разработки
+
+```bash
+npm install
+npm run compile
+# Нажмите F5 для запуска в режиме разработки
+```
+
+## Конфигурация
+
+### Файл `.ilnsk`
+
+Создаётся автоматически в корне проекта:
+
+```json
+{
+  "apiUrl": "https://api.openai.com/v1/",
+  "apiKey": "your-api-key",
+  "model": "gpt4",
+  "prompt": "...",
+  "gitmoji": true
+}
+```
+
+### Файл `repomix.config.json`
+
+Создаётся автоматически с оптимальными настройками для упаковки кода.
+
+### Настройка через UI
+
+1. Откройте **Explorer** (левая панель)
+2. Нажмите **Readme AI → Setup**
+3. Введите API URL, API Key и название модели
 
 ## Использование
 
-1. Откройте палитру команд
-2. Выполните `Readme AI: Generate README`
-3. Плагин упакует репозиторий и отправит в AI для генерации
+1. Откройте **Explorer** → **Readme AI**
+2. Нажмите **Generate README**
+3. Плагин:
+   - Запускает repomix → создаёт `repomix-output.xml`
+   - Подсчитывает токены для Qwen
+   - Отправляет код в AI
+   - Создаёт `README.md`
 
 ## Команды
 
@@ -38,18 +74,33 @@ VSCode плагин для генерации README с помощью AI и rep
 
 ## Требования
 
-- VSCode версии 1.75.0 или выше
+- VSCode версии 1.115.0 или выше
 - Node.js 18+
+
+## Структура проекта
+
+```
+src/
+├── config/          # Конфиги (типы, repomix)
+├── services/        # Бизнес-логика
+│   ├── config.ts    # Работа с файлами
+│   ├── repomix.ts   # Запуск repomix
+│   ├── ai.ts        # Запросы к AI
+│   └── token.ts     # Подсчёт токенов
+├── commands/       # Команды VSCode
+├── ui/             # TreeView
+└── extension.ts    # Точка входа
+```
 
 ## Разработка
 
 ```bash
-# Установка зависимостей
-npm install
-
 # Компиляция
 npm run compile
 
-# Запуск в режиме разработки
-F5
+# Сборка .vsix
+npm run package
+
+# Автоперекомпиляция
+npm run watch
 ```
