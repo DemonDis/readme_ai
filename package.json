@@ -4,6 +4,8 @@
   "description": "AI-powered README generator using repomix",
   "version": "0.0.1",
   "publisher": "readme-ai",
+  "license": "MIT",
+  "repository": "https://github.com/DemonDis/readme-ai",
   "engines": {
     "vscode": "^1.115.0"
   },
