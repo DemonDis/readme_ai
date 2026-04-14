@@ -4,16 +4,33 @@
   "description": "AI-powered README generator using repomix",
   "version": "0.0.1",
   "publisher": "readme-ai",
-  "icon": "icon.png",
   "engines": {
-    "vscode": "^1.75.0"
+    "vscode": "^1.115.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onView:readme-ai-sidebar"
+  ],
   "main": "./out/extension.js",
   "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "readme-ai-sidebar",
+          "name": "Readme AI"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "explorer": [
+        {
+          "id": "readme-ai-sidebar",
+          "title": "Readme AI"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "readme-ai.setup",
