@@ -31,8 +31,109 @@ export const DEFAULT_REPOMIX_CONFIG = {
     useGitignore: true,
     useDefaultPatterns: true,
     customPatterns: [
-      'additional-folder',
-      '**/*.log'
+      // Node.js
+      'node_modules/',
+      'dist/',
+      'build/',
+      'out/',
+      '.next/',
+      '.nuxt/',
+      '.output/',
+      '.turbo/',
+      'package-lock.json',
+      'yarn.lock',
+      'pnpm-lock.yaml',
+      'bun.lockb',
+      
+      // Python
+      '__pycache__/',
+      '.pytest_cache/',
+      '.mypy_cache/',
+      '.ruff_cache/',
+      'venv/',
+      '.venv/',
+      'env/',
+      '.env/',
+      '*.pyc',
+      '*.pyo',
+      '.python-version',
+      'poetry.lock',
+      'Pipfile.lock',
+      'requirements.txt',
+      'setup.py',
+      '*.egg-info/',
+      
+      // Go
+      'vendor/',
+      '*.test',
+      'coverage.txt',
+      'go.sum',
+      '.idea/',
+      
+      // Java
+      'target/',
+      'bin/',
+      'obj/',
+      '*.class',
+      '*.jar',
+      '*.war',
+      '.gradle/',
+      'build/',
+      '*.iml',
+      '.idea/',
+      
+      // Rust
+      'target/',
+      'Cargo.lock',
+      '.cargo/',
+      
+      // .NET
+      'bin/',
+      'obj/',
+      '*.dll',
+      '*.exe',
+      '*.pdb',
+      '*.user',
+      '*.suo',
+      'packages/',
+      
+      // IDEs
+      '.vscode/',
+      '.idea/',
+      '.svn/',
+      '.hg/',
+      
+      // C/C++
+      '*.o',
+      '*.obj',
+      '*.so',
+      '*.dll',
+      '*.dylib',
+      '*.exe',
+      'CMakeLists.txt.user',
+      
+      // Misc
+      '.cache/',
+      '.parcel-cache/',
+      '.git/',
+      '*.log',
+      '*.tmp',
+      '*.temp',
+      '*.lock',
+      '*.swp',
+      '*.swo',
+      '*~',
+      '.DS_Store',
+      'Thumbs.db',
+      'coverage/',
+      '.nyc_output/',
+      '.codecov/',
+      'types/',
+      'definitelytyped/',
+      '.tsbuildinfo',
+      '.eslintcache',
+      '.prettiercache',
+      '.stylelintcache',
     ]
   },
   security: {

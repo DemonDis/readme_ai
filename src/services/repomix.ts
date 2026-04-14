@@ -10,7 +10,7 @@ export class RepomixService {
   private repomixPath: string;
 
   constructor() {
-    this.repomixPath = path.join(__dirname, '..', '..', 'node_modules', 'repomix', 'bin', 'repomix.cjs');
+    this.repomixPath = path.join(__dirname, '..', 'node_modules', 'repomix', 'bin', 'repomix.cjs');
   }
 
   async run(workspacePath: string): Promise<string> {
