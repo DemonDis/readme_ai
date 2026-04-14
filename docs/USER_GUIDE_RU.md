@@ -37,9 +37,9 @@ npm run compile
 
 ```json
 {
-  "apiUrl": "https://api.hydraai.ru/v1/",
+  "apiUrl": "https://api.openai.ru/v1/",
   "apiKey": "your-api-key",
-  "model": "hydra-gpt-mini",
+  "model": "gpt",
   "prompt": "...",
   "gitmoji": true
 }
