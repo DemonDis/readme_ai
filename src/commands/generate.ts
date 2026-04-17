@@ -99,6 +99,10 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
       const timestamp = new Date().toLocaleString('ru-RU');
       fs.appendFileSync(readmePath, `\n\n---\nGenerated: ${timestamp}`);
 
+      if (fs.existsSync(outputPath)) {
+        fs.unlinkSync(outputPath);
+      }
+
       vscode.window.showInformationMessage(`${outputFileName} created successfully!`);
       
       const doc = await vscode.workspace.openTextDocument(readmePath);
