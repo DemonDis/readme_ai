@@ -82,8 +82,22 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
         outputFileName = baseName.charAt(0).toUpperCase() + baseName.slice(1) + '.md';
       }
 
-      const readmePath = path.join(workspacePath, outputFileName);
+      let readmePath = path.join(workspacePath, outputFileName);
+      if (fs.existsSync(readmePath)) {
+        const ext = path.extname(outputFileName);
+        const base = path.basename(outputFileName, ext);
+        let counter = 1;
+        do {
+          outputFileName = `${base}_${counter}${ext}`;
+          readmePath = path.join(workspacePath, outputFileName);
+          counter++;
+        } while (fs.existsSync(readmePath));
+      }
+
       fs.writeFileSync(readmePath, readmeContent);
+
+      const timestamp = new Date().toLocaleString('ru-RU');
+      fs.appendFileSync(readmePath, `\n\n---\nGenerated: ${timestamp}`);
 
       vscode.window.showInformationMessage(`${outputFileName} created successfully!`);
       
