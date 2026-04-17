@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { registerSetupCommand, registerGenerateCommand } from './commands';
+import { registerSetupCommand, registerGenerateCommand, registerUpdateCommand } from './commands';
 import { ReadmeAiTreeProvider } from './ui/provider';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -9,8 +9,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   const setupCommand = registerSetupCommand(context);
   const generateCommand = registerGenerateCommand(context);
+  const updateCommand = registerUpdateCommand(context);
 
-  context.subscriptions.push(treeView, setupCommand, generateCommand);
+  context.subscriptions.push(treeView, setupCommand, generateCommand, updateCommand);
 }
 
 export function deactivate() {}

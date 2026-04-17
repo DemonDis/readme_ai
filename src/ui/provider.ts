@@ -2,11 +2,13 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-function getPromptFiles(): string[] {
+function getPromptFiles(folder: string = ''): string[] {
   const ext = vscode.extensions.getExtension('readme-ai.readme-ai');
   if (!ext) return [];
   
-  const promptsPath = path.join(ext.extensionPath, 'src', 'prompts');
+  const promptsPath = folder 
+    ? path.join(ext.extensionPath, 'src', 'prompts', folder)
+    : path.join(ext.extensionPath, 'src', 'prompts');
   try {
     const files = fs.readdirSync(promptsPath).filter(f => f.endsWith('.md'));
     return files;
@@ -29,6 +31,18 @@ export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.Tree
           item.iconPath = new vscode.ThemeIcon('file-text');
           item.command = {
             command: 'readme-ai.generate',
+            title: file,
+            arguments: [file]
+          };
+          return item;
+        });
+      }
+      if (element.label === 'Update') {
+        return getPromptFiles('update').map(file => {
+          const item = new vscode.TreeItem(file.replace('.md', ''), vscode.TreeItemCollapsibleState.None);
+          item.iconPath = new vscode.ThemeIcon('file-text');
+          item.command = {
+            command: 'readme-ai.update',
             title: file,
             arguments: [file]
           };
@@ -58,6 +72,19 @@ export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.Tree
       return item;
     });
 
-    return [setupItem, generateItem];
+    const updateItem = new vscode.TreeItem('Update', vscode.TreeItemCollapsibleState.Expanded);
+    updateItem.iconPath = new vscode.ThemeIcon('sync');
+    (updateItem as vscode.TreeItem & { children?: vscode.TreeItem[] }).children = getPromptFiles('update').map(file => {
+      const item = new vscode.TreeItem(file.replace('.md', ''), vscode.TreeItemCollapsibleState.None);
+      item.iconPath = new vscode.ThemeIcon('file-text');
+      item.command = {
+        command: 'readme-ai.update',
+        title: file,
+        arguments: [file]
+      };
+      return item;
+    });
+
+    return [setupItem, generateItem, updateItem];
   }
 }
