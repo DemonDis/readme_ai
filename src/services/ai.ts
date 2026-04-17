@@ -4,9 +4,9 @@ export class AiService {
     apiKey: string,
     model: string,
     repomixContent: string,
-    promptType: string = 'Создай README.md для моего проекта'
+    prompt: string = 'Создай README.md для моего проекта'
   ): Promise<string> {
-    const fullPrompt = `Проанализируй код проекта ниже. ${promptType}
+    const fullPrompt = `${prompt}
 
 Код проекта:
 ${repomixContent}

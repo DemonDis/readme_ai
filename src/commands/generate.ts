@@ -11,13 +11,16 @@ const repomixService = new RepomixService();
 const aiService = new AiService();
 const tokenService = new TokenService();
 
-const PROMPTS: Record<string, string> = {
-  'readme': 'Создай красивый и структурированный файл README.md для проекта. Выведи ТОЛЬКО готовый результат.',
-  'api': 'Спроектируй REST API для системы на основе предоставленного кода. Выведи ТОЛЬКО готовый результат: таблица взаимодействий API и схемы данных в формате JSON.'
-};
+function getPromptContent(promptFile: string): string {
+  const ext = vscode.extensions.getExtension('readme-ai.readme-ai');
+  if (!ext) throw new Error('Extension not found');
+  
+  const promptsPath = path.join(ext.extensionPath, 'src', 'prompts', promptFile);
+  return fs.readFileSync(promptsPath, 'utf-8');
+}
 
 function getPromptType(promptFile: string): string {
-  return PROMPTS[promptFile.replace('.md', '')] || PROMPTS['readme'];
+  return getPromptContent(promptFile);
 }
 
 export function registerGenerateCommand(context: vscode.ExtensionContext): vscode.Disposable {
