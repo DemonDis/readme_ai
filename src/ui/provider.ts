@@ -18,13 +18,13 @@ function getPromptFiles(folder: string = ''): string[] {
   }
 }
 
-function createTreeItem(label: string, command: string, icon: string, args?: string[]): vscode.TreeItem {
+function createTreeItem(label: string, command: string, icon: string, args?: string[], folder?: string): vscode.TreeItem {
   const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
   item.iconPath = new vscode.ThemeIcon(icon);
   item.command = {
     command,
     title: label,
-    arguments: args ? [args[0]] : undefined
+    arguments: args && folder ? [args[0], folder] : args ? [args[0]] : undefined
   };
   return item;
 }
@@ -38,12 +38,17 @@ export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.Tree
     if (element) {
       if (element.label === 'Generate') {
         return getPromptFiles().map(file => 
-          createTreeItem(file.replace('.md', ''), 'readme-ai.generate', 'file-text', [file])
+          createTreeItem(file.replace('.md', ''), 'readme-ai.generate', 'file-text', [file], '')
         );
       }
       if (element.label === 'Update') {
         return getPromptFiles('update').map(file => 
-          createTreeItem(file.replace('.md', ''), 'readme-ai.update', 'file-text', [file])
+          createTreeItem(file.replace('.md', ''), 'readme-ai.update', 'file-text', [file], 'update')
+        );
+      }
+      if (element.label === 'Edit Prompts') {
+        return getPromptFiles().map(file => 
+          createTreeItem(file.replace('.md', ''), 'readme-ai.edit-prompt', 'file-text', [file], '')
         );
       }
       return [];
@@ -53,15 +58,19 @@ export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.Tree
     const generateItem = new vscode.TreeItem('Generate', vscode.TreeItemCollapsibleState.Expanded);
     generateItem.iconPath = new vscode.ThemeIcon('files');
     (generateItem as vscode.TreeItem & { children?: vscode.TreeItem[] }).children = getPromptFiles().map(file => 
-      createTreeItem(file.replace('.md', ''), 'readme-ai.generate', 'file-text', [file])
+      createTreeItem(file.replace('.md', ''), 'readme-ai.generate', 'file-text', [file], '')
     );
 
     const updateItem = new vscode.TreeItem('Update', vscode.TreeItemCollapsibleState.Expanded);
     updateItem.iconPath = new vscode.ThemeIcon('sync');
     (updateItem as vscode.TreeItem & { children?: vscode.TreeItem[] }).children = getPromptFiles('update').map(file => 
-      createTreeItem(file.replace('.md', ''), 'readme-ai.update', 'file-text', [file])
+      createTreeItem(file.replace('.md', ''), 'readme-ai.update', 'file-text', [file], 'update')
     );
 
-    return [setupItem, generateItem, updateItem];
+    const editPromptsItem = new vscode.TreeItem('Edit Prompts', vscode.TreeItemCollapsibleState.Expanded);
+    editPromptsItem.iconPath = new vscode.ThemeIcon('edit');
+    (editPromptsItem as vscode.TreeItem & { children?: vscode.TreeItem[] }).children = [];
+
+    return [setupItem, generateItem, updateItem, editPromptsItem];
   }
 }
