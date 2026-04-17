@@ -25,7 +25,8 @@ export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.Tree
     if (element) {
       if (element.label === 'Generate') {
         return getPromptFiles().map(file => {
-          const item = new vscode.TreeItem(file.replace('.md', ''));
+          const item = new vscode.TreeItem(file.replace('.md', ''), vscode.TreeItemCollapsibleState.None);
+          item.iconPath = new vscode.ThemeIcon('file-text');
           item.command = {
             command: 'readme-ai.generate',
             title: file,
@@ -37,15 +38,18 @@ export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.Tree
       return [];
     }
 
-    const setupItem = new vscode.TreeItem('Setup');
+    const setupItem = new vscode.TreeItem('Setup', vscode.TreeItemCollapsibleState.None);
+    setupItem.iconPath = new vscode.ThemeIcon('gear');
     setupItem.command = {
       command: 'readme-ai.setup',
       title: 'Setup'
     };
 
     const generateItem = new vscode.TreeItem('Generate', vscode.TreeItemCollapsibleState.Expanded);
+    generateItem.iconPath = new vscode.ThemeIcon('files');
     (generateItem as vscode.TreeItem & { children?: vscode.TreeItem[] }).children = getPromptFiles().map(file => {
-      const item = new vscode.TreeItem(file.replace('.md', ''));
+      const item = new vscode.TreeItem(file.replace('.md', ''), vscode.TreeItemCollapsibleState.None);
+      item.iconPath = new vscode.ThemeIcon('file-text');
       item.command = {
         command: 'readme-ai.generate',
         title: file,
