@@ -26,7 +26,9 @@ export const DEFAULT_REPOMIX_CONFIG = {
       includeLogsCount: 50
     }
   },
-  include: ['**/*'],
+  include: [
+    '**/*'
+  ],
   ignore: {
     useGitignore: true,
     useDefaultPatterns: true,
