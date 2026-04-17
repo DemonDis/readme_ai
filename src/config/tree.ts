@@ -53,7 +53,8 @@ export const DEFAULT_TREE_EXCLUDE = [
   '*.dylib',
   '.DS_Store',
   'Thumbs.db',
-  '*.svg'
+  '*.svg',
+  '*.md'
 ];
 
 export const TREE_CONFIG_FILE = 'tree.txt';

@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { ConfigService } from '../services/config';
 import { AiService } from '../services/ai';
-import { DEFAULT_TREE_EXCLUDE, TREE_CONFIG_FILE } from '../config/tree';
+import { DEFAULT_TREE_EXCLUDE } from '../config/tree';
 import { DEFAULT_REPOMIX_CONFIG } from '../config/repomix';
 
 const configService = new ConfigService();
@@ -102,13 +102,10 @@ export function registerSetupCommand(context: vscode.ExtensionContext): vscode.D
     const workspacePath = workspaceFolder.uri.fsPath;
     const ilnskPath = configService.getIlnskPath(workspacePath);
     const repomixPath = configService.getRepomixConfigPath(workspacePath);
-    const treePath = path.join(workspacePath, TREE_CONFIG_FILE);
 
     vscode.window.showInformationMessage('Generating project tree...');
 
     const treeContent = generateTree(workspacePath);
-    fs.writeFileSync(treePath, treeContent);
-    vscode.window.showInformationMessage(`${TREE_CONFIG_FILE} created`);
 
     const config = configService.readIlnskConfig(workspacePath);
     if (!config) {

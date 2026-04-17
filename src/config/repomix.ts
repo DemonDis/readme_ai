@@ -125,14 +125,7 @@ export const DEFAULT_REPOMIX_CONFIG = {
     showLineNumbers: false,
     truncateBase64: false,
     copyToClipboard: false,
-    includeEmptyDirectories: false,
-    git: {
-      sortByChanges: true,
-      sortByChangesMaxCommits: 100,
-      includeDiffs: false,
-      includeLogs: false,
-      includeLogsCount: 50
-    }
+    includeEmptyDirectories: false
   },
   include: DEFAULT_INCLUDE_PATTERN,
   ignore: {
