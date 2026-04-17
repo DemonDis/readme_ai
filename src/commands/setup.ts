@@ -120,7 +120,7 @@ export function registerSetupCommand(context: vscode.ExtensionContext): vscode.D
     }
 
     const answer = await vscode.window.showQuickPick(['Yes', 'No'], {
-      placeHolder: 'Generate repomix config using AI?'
+      title: 'Generate repomix config using AI?'
     });
 
     if (answer !== 'Yes') {
@@ -131,7 +131,8 @@ export function registerSetupCommand(context: vscode.ExtensionContext): vscode.D
       return;
     }
 
-    vscode.window.showInformationMessage('Generating repomix config...');
+    vscode.window.showInformationMessage('Generating project tree...');
+    vscode.window.showInformationMessage('Sending to AI...');
 
     const prompt = `На основе дерева проекта ниже определи какие файлы и папки должны быть включены (include) и какие исключены (customPatterns) для корректной работы repomix.
 
