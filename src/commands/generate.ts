@@ -11,8 +11,17 @@ const repomixService = new RepomixService();
 const aiService = new AiService();
 const tokenService = new TokenService();
 
+const PROMPTS: Record<string, string> = {
+  'readme': 'Создай красивый и структурированный файл README.md для проекта. Выведи ТОЛЬКО готовый результат.',
+  'api': 'Спроектируй REST API для системы на основе предоставленного кода. Выведи ТОЛЬКО готовый результат: таблица взаимодействий API и схемы данных в формате JSON.'
+};
+
+function getPromptType(promptFile: string): string {
+  return PROMPTS[promptFile.replace('.md', '')] || PROMPTS['readme'];
+}
+
 export function registerGenerateCommand(context: vscode.ExtensionContext): vscode.Disposable {
-  return vscode.commands.registerCommand('readme-ai.generate', async () => {
+  return vscode.commands.registerCommand('readme-ai.generate', async (promptFile?: string) => {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     if (!workspaceFolder) {
       vscode.window.showErrorMessage('No workspace folder found');
@@ -49,19 +58,31 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
       
       vscode.window.showInformationMessage(`Token count (Qwen): ${tokenCount.toLocaleString()}`);
 
+      let promptType = 'Создай README.md для моего проекта';
+      if (promptFile) {
+        promptType = getPromptType(promptFile);
+      }
+
       vscode.window.showInformationMessage('Sending to AI...');
       
       const readmeContent = await aiService.generateReadme(
         config.apiUrl,
         config.apiKey,
         config.model,
-        repomixContent
+        repomixContent,
+        promptType
       );
 
-      const readmePath = path.join(workspacePath, 'README.md');
+      let outputFileName = 'README.md';
+      if (promptFile) {
+        const baseName = promptFile.replace('.md', '');
+        outputFileName = baseName.charAt(0).toUpperCase() + baseName.slice(1) + '.md';
+      }
+
+      const readmePath = path.join(workspacePath, outputFileName);
       fs.writeFileSync(readmePath, readmeContent);
 
-      vscode.window.showInformationMessage('README.md created successfully!');
+      vscode.window.showInformationMessage(`${outputFileName} created successfully!`);
       
       const doc = await vscode.workspace.openTextDocument(readmePath);
       await vscode.window.showTextDocument(doc);

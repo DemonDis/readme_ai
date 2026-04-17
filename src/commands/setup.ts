@@ -1,6 +1,4 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
 import { ConfigService } from '../services/config';
 
 const configService = new ConfigService();
@@ -13,39 +11,20 @@ export function registerSetupCommand(context: vscode.ExtensionContext): vscode.D
       return;
     }
 
-    let config = configService.readIlnskConfig(workspaceFolder.uri.fsPath);
-    if (!config) {
-      config = configService.createIlnskConfig(workspaceFolder.uri.fsPath);
+    const workspacePath = workspaceFolder.uri.fsPath;
+    const ilnskPath = configService.getIlnskPath(workspacePath);
+    const repomixPath = configService.getRepomixConfigPath(workspacePath);
+
+    if (!configService.fileExists(ilnskPath)) {
+      configService.createIlnskConfig(workspacePath);
+      vscode.window.showInformationMessage('.ilnsk created. Please configure it manually.');
+    } else {
+      vscode.window.showInformationMessage('.ilnsk already exists');
     }
 
-    configService.checkOrCreateRepomixConfig(workspaceFolder.uri.fsPath);
-    vscode.window.showInformationMessage('Created repomix.config.json');
-
-    const apiUrl = await vscode.window.showInputBox({
-      prompt: 'Enter API URL',
-      value: config.apiUrl,
-    });
-    
-    const apiKey = await vscode.window.showInputBox({
-      prompt: 'Enter API Key',
-      value: config.apiKey,
-    });
-    
-    const model = await vscode.window.showInputBox({
-      prompt: 'Enter Model Name',
-      value: config.model,
-    });
-
-    if (apiUrl && apiKey && model) {
-      const newConfig = {
-        apiUrl,
-        apiKey,
-        model,
-        prompt: config.prompt,
-        gitmoji: config.gitmoji
-      };
-      configService.saveIlnskConfig(workspaceFolder.uri.fsPath, newConfig);
-      vscode.window.showInformationMessage('Settings saved to .ilnsk!');
+    if (!configService.fileExists(repomixPath)) {
+      configService.createRepomixConfig(workspacePath);
+      vscode.window.showInformationMessage('repomix.config.json created');
     }
   });
 }

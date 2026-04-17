@@ -1,22 +1,59 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+
+function getPromptFiles(): string[] {
+  const ext = vscode.extensions.getExtension('readme-ai.readme-ai');
+  if (!ext) return [];
+  
+  const promptsPath = path.join(ext.extensionPath, 'src', 'prompts');
+  try {
+    const files = fs.readdirSync(promptsPath).filter(f => f.endsWith('.md'));
+    return files;
+  } catch (e) {
+    console.error('Error reading prompts:', e);
+    return [];
+  }
+}
 
 export class ReadmeAiTreeProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
   getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;
   }
 
-  getChildren(): vscode.TreeItem[] {
-    const items = [
-      { label: 'Setup', command: 'readme-ai.setup' },
-      { label: 'Generate README', command: 'readme-ai.generate' }
-    ];
-    return items.map(item => {
-      const treeItem = new vscode.TreeItem(item.label);
-      treeItem.command = {
-        command: item.command,
-        title: item.label
+  getChildren(element?: vscode.TreeItem): vscode.TreeItem[] {
+    if (element) {
+      if (element.label === 'Generate') {
+        return getPromptFiles().map(file => {
+          const item = new vscode.TreeItem(file.replace('.md', ''));
+          item.command = {
+            command: 'readme-ai.generate',
+            title: file,
+            arguments: [file]
+          };
+          return item;
+        });
+      }
+      return [];
+    }
+
+    const setupItem = new vscode.TreeItem('Setup');
+    setupItem.command = {
+      command: 'readme-ai.setup',
+      title: 'Setup'
+    };
+
+    const generateItem = new vscode.TreeItem('Generate', vscode.TreeItemCollapsibleState.Expanded);
+    (generateItem as vscode.TreeItem & { children?: vscode.TreeItem[] }).children = getPromptFiles().map(file => {
+      const item = new vscode.TreeItem(file.replace('.md', ''));
+      item.command = {
+        command: 'readme-ai.generate',
+        title: file,
+        arguments: [file]
       };
-      return treeItem;
+      return item;
     });
+
+    return [setupItem, generateItem];
   }
 }

@@ -3,20 +3,15 @@ export class AiService {
     apiUrl: string,
     apiKey: string,
     model: string,
-    repomixContent: string
+    repomixContent: string,
+    promptType: string = 'Создай README.md для моего проекта'
   ): Promise<string> {
-    const prompt = `Generate a README.md file for this repository based on the following code analysis:
+    const fullPrompt = `Проанализируй код проекта ниже. ${promptType}
 
+Код проекта:
 ${repomixContent}
 
-Generate a comprehensive README.md with:
-1. Project title and description
-2. Installation instructions
-3. Usage examples
-4. Features
-5. License
-
-Write in Russian language.`;
+Выведи ТОЛЬКО готовый результат без введений, рассуждений и пояснений.`;
 
     const response = await fetch(`${apiUrl}chat/completions`, {
       method: 'POST',
@@ -29,7 +24,7 @@ Write in Russian language.`;
         messages: [
           {
             role: 'user',
-            content: prompt
+            content: fullPrompt
           }
         ]
       })

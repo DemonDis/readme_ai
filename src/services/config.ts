@@ -5,12 +5,16 @@ import { IlnskConfig, DEFAULT_ILNSK_CONFIG } from '../config/types';
 import { DEFAULT_REPOMIX_CONFIG } from '../config/repomix';
 
 export class ConfigService {
-  private getIlnskPath(workspacePath: string): string {
+  getIlnskPath(workspacePath: string): string {
     return path.join(workspacePath, '.ilnsk');
   }
 
-  private getRepomixConfigPath(workspacePath: string): string {
+  getRepomixConfigPath(workspacePath: string): string {
     return path.join(workspacePath, 'repomix.config.json');
+  }
+
+  fileExists(filePath: string): boolean {
+    return fs.existsSync(filePath);
   }
 
   readIlnskConfig(workspacePath: string): IlnskConfig | null {
@@ -44,5 +48,10 @@ export class ConfigService {
       return true;
     }
     return false;
+  }
+
+  createRepomixConfig(workspacePath: string): void {
+    const configPath = this.getRepomixConfigPath(workspacePath);
+    fs.writeFileSync(configPath, JSON.stringify(DEFAULT_REPOMIX_CONFIG, null, 2));
   }
 }
