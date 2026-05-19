@@ -69,7 +69,17 @@ export function registerUpdateCommand(context: vscode.ExtensionContext): vscode.
 
     const diff = await gitService.getDiff(baseRef);
 
-    if (!diff.hasChanges) {
+    const allChangedFiles = [
+      ...diff.changedFiles,
+      ...diff.addedFiles,
+      ...diff.deletedFiles,
+      ...diff.renamedFiles,
+    ];
+    const onlyReadmeChanged =
+      allChangedFiles.length > 0 &&
+      allChangedFiles.every(f => f === 'README.md');
+
+    if (!diff.hasChanges || onlyReadmeChanged) {
       const action = await vscode.window.showWarningMessage(
         `No code changes detected since ${baseRef.slice(0, 7)}. Force update anyway?`,
         { modal: true },
