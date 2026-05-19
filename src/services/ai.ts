@@ -13,7 +13,12 @@ ${repomixContent}
 
 Выведи ТОЛЬКО готовый результат без введений, рассуждений и пояснений.`;
 
-    const response = await fetch(`${apiUrl}chat/completions`, {
+    const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+    const url = baseUrl.includes('/v1')
+      ? `${baseUrl}/chat/completions`
+      : `${baseUrl}/v1/chat/completions`;
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ConfigService } from '../services/config';
 
-const configService = new ConfigService();
 const AI_SERVICE_NAME = 'readme-ai.edit-prompt';
 
 export function registerEditPromptCommand(context: vscode.ExtensionContext): vscode.Disposable {

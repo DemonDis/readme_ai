@@ -1,30 +1,64 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
 import * as vscode from 'vscode';
+import { pack } from 'repomix';
 
-const execAsync = promisify(exec);
+const outputChannel = vscode.window.createOutputChannel('Readme AI');
 
 export class RepomixService {
-  private repomixPath: string;
-
-  constructor() {
-    this.repomixPath = path.join(__dirname, '..', '..', 'node_modules', 'repomix', 'bin', 'repomix.cjs');
-  }
-
   async run(workspacePath: string): Promise<string> {
     try {
-      await execAsync(`node "${this.repomixPath}"`, {
-        cwd: workspacePath
-      });
+      outputChannel.appendLine('Starting repomix...');
+      
+      const configPath = path.join(workspacePath, 'repomix.config.json');
+      let config: any = {};
+      
+      if (fs.existsSync(configPath)) {
+        const configContent = fs.readFileSync(configPath, 'utf-8');
+        config = JSON.parse(configContent);
+      }
 
       const outputPath = path.join(workspacePath, 'repomix-output.xml');
+
+      await pack(
+        [workspacePath],
+        {
+          ...config,
+          cwd: workspacePath,
+          output: {
+            filePath: 'repomix-output.xml',
+            style: 'xml',
+            includeEmptyFiles: false,
+            includeFileSignature: true,
+            includeSummary: true,
+            showLineNumbers: true,
+          },
+          ignore: {
+            useGitignore: true,
+            useDefaultPatterns: true,
+            customPatterns: config['ignore']?.customPatterns || [
+              '!**/node_modules/**',
+              '!**/.git/**',
+              '!**/.ilnsk',
+              '!**/.env/*',
+              '!**/.env'
+            ],
+          },
+        } as any,
+        (progress) => {
+          if (progress.includes('Done') || progress.includes('Complete')) {
+            outputChannel.appendLine(progress);
+          }
+        }
+      );
+
       if (fs.existsSync(outputPath)) {
+        outputChannel.appendLine('Repomix completed');
         return outputPath;
       }
       throw new Error('Repomix output not found');
     } catch (error: any) {
+      outputChannel.appendLine(`Error: ${error.message}`);
       throw new Error(`Repomix error: ${error.message}`);
     }
   }

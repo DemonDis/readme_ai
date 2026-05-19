@@ -19,10 +19,6 @@ function getPromptContent(promptFile: string): string {
   return fs.readFileSync(promptsPath, 'utf-8');
 }
 
-function getPromptType(promptFile: string): string {
-  return getPromptContent(promptFile);
-}
-
 export function registerGenerateCommand(context: vscode.ExtensionContext): vscode.Disposable {
   return vscode.commands.registerCommand('readme-ai.generate', async (promptFile?: string) => {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
@@ -63,7 +59,7 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
 
       let promptType = 'Создай README.md для моего проекта';
       if (promptFile) {
-        promptType = getPromptType(promptFile);
+        promptType = getPromptContent(promptFile);
       }
 
       vscode.window.showInformationMessage('Sending to AI...');
@@ -96,7 +92,7 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
 
       fs.writeFileSync(readmePath, readmeContent);
 
-      const timestamp = new Date().toLocaleString('ru-RU');
+      const timestamp = new Date().toLocaleString(vscode.env.language);
       fs.appendFileSync(readmePath, `\n\n---\nGenerated: ${timestamp}`);
 
       if (fs.existsSync(outputPath)) {

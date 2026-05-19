@@ -41,6 +41,14 @@
       {
         "command": "readme-ai.generate",
         "title": "Generate README with AI"
+      },
+      {
+        "command": "readme-ai.edit-prompt",
+        "title": "Edit Prompt"
+      },
+      {
+        "command": "readme-ai.update",
+        "title": "Update README"
       }
     ],
     "configuration": {
