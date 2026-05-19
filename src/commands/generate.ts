@@ -5,6 +5,7 @@ import { ConfigService } from '../services/config';
 import { RepomixService } from '../services/repomix';
 import { AiService } from '../services/ai';
 import { TokenService } from '../services/token';
+import { GitService } from '../services/git';
 
 const configService = new ConfigService();
 const repomixService = new RepomixService();
@@ -92,8 +93,11 @@ export function registerGenerateCommand(context: vscode.ExtensionContext): vscod
 
       fs.writeFileSync(readmePath, readmeContent);
 
-      const timestamp = new Date().toLocaleString(vscode.env.language);
-      fs.appendFileSync(readmePath, `\n\n---\nGenerated: ${timestamp}`);
+      const gitService = new GitService(workspacePath);
+      const commitHash = await gitService.getLastCommitHash();
+      if (commitHash) {
+        fs.appendFileSync(readmePath, `\n\n<!-- readme-ai: ${commitHash} -->`);
+      }
 
       if (fs.existsSync(outputPath)) {
         fs.unlinkSync(outputPath);
