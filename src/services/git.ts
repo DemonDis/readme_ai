@@ -109,8 +109,7 @@ export class GitService {
     }
   }
 
-  formatDiffForAI(diff: GitDiffSummary): string {
-    const maxLength = 8000;
+  formatDiffForAI(diff: GitDiffSummary, maxLength: number = 8000): string {
     let diffText = diff.rawDiff;
     if (diffText.length > maxLength) {
       diffText = diffText.slice(0, maxLength) + '\n... (truncated)';

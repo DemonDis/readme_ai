@@ -66,6 +66,7 @@ export function registerUpdateCommand(context: vscode.ExtensionContext): vscode.
     }
 
     const baseRef = hashMatch[1];
+    const readmeWithoutMarker = currentReadme.replace(/<!-- readme-ai:\s*[a-f0-9]+\s*-->\s*/gi, '');
 
     const diff = await gitService.getDiff(baseRef);
 
@@ -91,30 +92,51 @@ export function registerUpdateCommand(context: vscode.ExtensionContext): vscode.
       if (action !== 'Force Update') return;
     }
 
-    vscode.window.showInformationMessage('Running repomix...');
-    const outputPath = await repomixService.run(workspacePath);
-    let repomixContent = repomixService.readOutput(outputPath);
-    repomixContent = repomixContent.replace(
-      /<file\s+path="[^"]*README\.md"[^>]*>[\s\S]*?<\/file>\n*/i,
-      '',
-    );
-    repomixContent = repomixContent.replace(/^.*README\.md.*\n/gm, '');
-    const tokenCount = tokenService.countForQwen(repomixContent);
-    vscode.window.showInformationMessage(`Token count (Qwen): ${tokenCount.toLocaleString()}`);
+    const DIFF_MAX_SIZE = parseInt(process.env.README_AI_DIFF_MAX_SIZE || '5000', 10);
+    const DIFF_TRUNCATE = parseInt(process.env.README_AI_DIFF_TRUNCATE || '8000', 10);
 
     const promptContent = getPromptContent('update.md');
+    let readmeContent: string;
 
-    vscode.window.showInformationMessage('Sending to AI...');
+    if (diff.rawDiff.length <= DIFF_MAX_SIZE) {
+      const formattedDiff = gitService.formatDiffForAI(diff, DIFF_TRUNCATE);
+      const fullContext = `${promptContent}
 
-    const readmeContent = await aiService.generateReadme(
-      config.apiUrl,
-      config.apiKey,
-      config.model,
-      repomixContent,
-      promptContent,
-    );
+Below is the current README.md and the code diff. Update the README to reflect the changes in the diff, preserving its style and any manual edits.
 
-    if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+Current README.md:
+\`\`\`markdown
+${readmeWithoutMarker}
+\`\`\`
+
+${formattedDiff}`;
+
+      vscode.window.showInformationMessage('Using diff-only mode...');
+      readmeContent = await aiService.generateReadme(
+        config.apiUrl, config.apiKey, config.model,
+        '',
+        fullContext,
+      );
+    } else {
+      vscode.window.showInformationMessage('Running repomix...');
+      const outputPath = await repomixService.run(workspacePath);
+      let repomixContent = repomixService.readOutput(outputPath);
+      repomixContent = repomixContent.replace(
+        /<file\s+path="[^"]*README\.md"[^>]*>[\s\S]*?<\/file>\n*/i,
+        '',
+      );
+      repomixContent = repomixContent.replace(/^.*README\.md.*\n/gm, '');
+      const tokenCount = tokenService.countForQwen(repomixContent);
+      vscode.window.showInformationMessage(`Token count (Qwen): ${tokenCount.toLocaleString()}`);
+
+      readmeContent = await aiService.generateReadme(
+        config.apiUrl, config.apiKey, config.model,
+        repomixContent,
+        promptContent,
+      );
+
+      if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+    }
 
     const newCommitHash = await gitService.getLastCommitHash();
     const resultContent = readmeContent.trimEnd() +
